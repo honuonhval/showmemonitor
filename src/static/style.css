@@ -1,0 +1,12 @@
+.wrapper {
+    display: grid;
+}
+
+.title {
+    align-content: center;
+}
+
+.wrapper > .feed {
+    width: 100%;
+    min-width: 280px;
+}

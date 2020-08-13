@@ -1,0 +1,13 @@
+[Unit]
+Description=Show Me Monitoring Application
+After=network.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/code/showme/src
+Environment=FLASK_CONFIG=production
+ExecStart=/home/pi/.local/venv/showme/bin/gunicorn -b 0.0.0.0:5000 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

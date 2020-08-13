@@ -1,0 +1,31 @@
+* Show Me
+Simple home camera / monitoring app
+* Setup
+Setup venv if needed (i.e. python3 -m venv venv) then:
+
+#+BEGIN_SRC sh
+pip install -r requirements.txt
+#+END_SRC
+
+Customize .env as needed
+* Running the app
+#+BEGIN_SRC sh
+flask run --host=0.0.0.0
+#+END_SRC
+--host flag will allow the app to bind on any ip, which allows any device to connect to the app
+
+Go to localhost:5000
+
+To run it in systemd, edit showme.service (WorkingDirectory and ExecStart specifically)
+Copy it to /etc/systemd/system/
+then start/enable the service
+* Security
+Do NOT use this app in production!
+It is only built as proof of concept.
+There is no security measures in place.
+
+Notably:
+- This app cannot tell who or how many devices are connected and streaming (TODO)
+- Related to above point, authentication and authorization is not implemented (TODO)
+- Flask is a wrapper around Werkzeug which allows access to console as debug tool
+  - It can potentially allow RCE
