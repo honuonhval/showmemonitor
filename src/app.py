@@ -18,6 +18,21 @@ def gen(camera):
         yield (b'--frame\r\n'
                b'Content-Type: image\r\n\r\n' + frame + b'\r\n')
 
+@app.route('/stream')
+def video_stream():
+    def generate():
+        p = subprocess.Popen('cat src/sf.mp4 | ffmpeg -i - ' \
+                             ' -movflags frag_keyframe+empty_moov' \ # allow mp4 to stream
+                             ' -vf scale=640:-1' \
+                             ' -f mp4 -', shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        for data in iter(p.stdout.readline, b''):
+            yield data
+    return Response(generate(), mimetype='video/mp4')
+
+@app.route('/video')
+def video():
+    return render_template('stream.html')
+
 @app.route("/monitor")
 def monitor():
     return Response(gen(Camera()),
