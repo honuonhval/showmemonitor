@@ -1,5 +1,9 @@
 from flask import Flask, render_template, Response
-from camera import Camera
+import subprocess
+try:
+    from camera import Camera
+except ImportError:
+    from stream import LocalStream as camera
 
 app = Flask(__name__)
 
