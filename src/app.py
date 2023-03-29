@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from flask import Flask, render_template, Response, send_file
+from flask import Flask, render_template, Response, request, send_file, redirect
 import subprocess
 try:
     from camera import Camera
@@ -12,7 +12,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return render_template('index.html')
+    clips = subprocess.Popen('ls -1 | grep mp4', \
+                            shell=True, \
+                            stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    files = str(clips.stdout.read(), 'utf-8').strip().split('\n')
+    return render_template('index.html', clips=files)
 
 def gen(camera):
     while True:
@@ -41,9 +45,13 @@ def monitor():
     return Response(gen(Camera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/get/<path:file>')
-def get(file):
-    return send_file(file)
+@app.route('/clips', methods=['POST'])
+def get():
+    if request.method == 'POST':
+        file = request.form['clip']
+        return send_file(file)
+    else:
+        return redirect('/')
 
 
 if __name__ == '__main__':
