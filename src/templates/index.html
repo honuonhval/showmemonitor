@@ -1,28 +1,22 @@
-<!doctype html>
-<html class="no-js" lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>showme streaming</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+{% extends 'base.html' %}
 
-        <!-- Place favicon.ico in the root directory -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">
-            You are using an <strong>outdated</strong> browser. Please
-            <a href="http://browsehappy.com/">upgrade your browser</a> to improve
-            your experience.
-            </p>
-        <![endif]-->
+{% block title %}
+<title>Show Me Monitor</title>
+{% endblock %}
 
-        <div class="wrapper">
-            <h1 class="title">Show me</h1>
-            <img class="feed" src="{{ url_for('monitor') }}" />
-            <h2>If you don't see anything, try /video to stream video clip</h2>
-        </div>
-    </body>
-</html>
+{% block content %}
+<!-- <img class="feed" src="{{ url_for('monitor') }}" /> -->
+{% endblock %}
+
+{% block clips %}
+<form action="/clips" method="POST">
+<label for="clip">Choose previously saved clip to download:</label>
+<select name="clip" id="clip">
+{% for clip in clips %}
+    <option value="{{ clip }}">{{ clip }}</option>
+{% endfor %}
+</select>
+
+<input type="submit" value="Download" />
+</form>
+{% endblock %}
