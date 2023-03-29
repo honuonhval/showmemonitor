@@ -1,4 +1,6 @@
-from flask import Flask, render_template, Response
+#!/usr/bin/env python
+
+from flask import Flask, render_template, Response, send_file
 import subprocess
 try:
     from camera import Camera
@@ -8,7 +10,7 @@ except ImportError:
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route('/')
 def hello():
     return render_template('index.html')
 
@@ -22,9 +24,10 @@ def gen(camera):
 def video_stream():
     def generate():
         p = subprocess.Popen('cat src/sf.mp4 | ffmpeg -i - ' \
-                             ' -movflags frag_keyframe+empty_moov' \ # allow mp4 to stream
+                             ' -movflags frag_keyframe+empty_moov' \
                              ' -vf scale=640:-1' \
                              ' -f mp4 -', shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+
         for data in iter(p.stdout.readline, b''):
             yield data
     return Response(generate(), mimetype='video/mp4')
@@ -33,7 +36,15 @@ def video_stream():
 def video():
     return render_template('stream.html')
 
-@app.route("/monitor")
+@app.route('/monitor')
 def monitor():
     return Response(gen(Camera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/get/<path:file>')
+def get(file):
+    return send_file(file)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
