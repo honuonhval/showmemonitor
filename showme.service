@@ -3,10 +3,10 @@ Description=Show Me Monitoring Application
 After=network.target
 
 [Service]
-User=pi
-WorkingDirectory=/home/pi/code/showme/src
-Environment=FLASK_CONFIG=production
-ExecStart=/home/pi/.local/venv/showme/bin/gunicorn -b 0.0.0.0:5000 app:app
+User=<username>
+WorkingDirectory=<path_to_showmemonitor>/showmemonitor/src
+Environment=FLASK_CONFIG=debug
+ExecStart=<path_to_pyenv_home>/.pyenv/versions/showme/bin/gunicorn -b 0.0.0.0:5000 app:app
 Restart=always
 
 [Install]

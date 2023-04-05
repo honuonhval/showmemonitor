@@ -1,7 +1,7 @@
 * Show Me
 Simple home camera / monitoring app (NOT INTENDED FOR ACTUAL USAGE, look at Security concerns)
 * Setup
-Setup venv if needed (i.e. python3 -m venv venv) then:
+Setup venv if needed (i.e. python3 -m venv showme) then:
 
 #+BEGIN_SRC sh
 pip install -r requirements.txt
@@ -9,20 +9,26 @@ pip install -r requirements.txt
 
 Customize .env as needed
 * Running the app
+cd into /src
 #+BEGIN_SRC sh
-flask run --host=0.0.0.0
+python app.py
 #+END_SRC
---host flag will allow the app to bind on any ip, which allows any device to connect to the app
 
 Go to localhost:5000
 
 To run it in systemd, edit showme.service (WorkingDirectory and ExecStart specifically)
 Copy it to /etc/systemd/system/
-then start/enable the service
+then start/stop the service
+#+begin_src shell
+sudo systemctl start showme.service
+sudo systemctl stop showme.service
+#+end_src
+
+Exploit is worked out
 * Security
 Do NOT use this app in production!
-It is only built as proof of concept.
-There is no security measures in place.
+It is only built as a proof of concept.
+There are no security measures in place.
 
 Notably:
 - This app cannot tell who or how many devices are connected and streaming (TODO)
